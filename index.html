@@ -1535,9 +1535,11 @@
     .section-sub { margin-bottom: 24px; }
     .letter { padding: 26px 20px; }
     .photos { padding: 2px 0 18px; gap: 14px; }
-    .reel-caption { margin-top: 22px; }
+    .reel-caption { margin-top: 22px; font-size: clamp(1.2rem, 4.5vw, 1.6rem); }
     .reel-hint { top: 7%; }
     .name-reel { height: 300vh; }
+    .reel-inner { flex-wrap: nowrap; gap: 3px; }
+    .reel-letter { font-size: clamp(3rem, 15vw, 8rem); }
     .cake-wrap { margin: 6px auto 22px; }
     .redeem { margin-top: 16px; }
     footer { padding: 34px 16px 80px; }
@@ -2503,7 +2505,6 @@
   var reelCaption = $('reelCaption');
   var progressBar = $('progressBar');
   var reelIdx = 0;
-  var reelTones = [523.25, 587.33, 659.25, 783.99, 880.00];
   var scrollTicking = false;
   function onScroll() {
     if (scrollTicking) return;
@@ -2531,7 +2532,6 @@
           var on = dir > 0;
           letter.classList.toggle('on', on);
           if (on) {
-            if (AC) tone(reelTones[li], 0, 0.55, 'triangle', 0.16, AC.currentTime + 0.04);
             var r = letter.getBoundingClientRect();
             launchConfetti(24, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
           }
