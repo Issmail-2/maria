@@ -48,9 +48,18 @@
     background: radial-gradient(120% 120% at 50% 0%, transparent 45%, rgba(0,0,0,.4) 100%);
   }
 
-  body.locked {
+  html.locked, body.locked {
     overflow: hidden;
-    height: 100vh;
+  }
+  body.locked {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    overscroll-behavior: none;
   }
 
   @keyframes bgShift {
@@ -2152,9 +2161,11 @@
   function setLock(locked) {
     if (locked) {
       document.body.classList.add('locked');
+      document.documentElement.classList.add('locked');
       scrollTextEl.textContent = '🔒 the rest unlocks on your birthday';
     } else {
       document.body.classList.remove('locked');
+      document.documentElement.classList.remove('locked');
       scrollTextEl.textContent = 'scroll to open your surprise';
     }
   }
@@ -2187,7 +2198,7 @@
   setLock(!(isBirthdayToday() || previewMode));
 
   function lockedGuard(e) {
-    if (document.body.classList.contains('locked')) e.preventDefault();
+    if (document.body.classList.contains('locked') || document.documentElement.classList.contains('locked')) e.preventDefault();
   }
   window.addEventListener('wheel', lockedGuard, { passive: false });
   window.addEventListener('touchmove', lockedGuard, { passive: false });
