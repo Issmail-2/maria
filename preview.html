@@ -48,26 +48,6 @@
     background: radial-gradient(120% 120% at 50% 0%, transparent 45%, rgba(0,0,0,.4) 100%);
   }
 
-  #previewTag {
-    position: fixed;
-    top: 58px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 130;
-    background: rgba(12, 70, 38, .92);
-    border: 1px solid rgba(76, 220, 130, .7);
-    color: #d3ffe7;
-    font-size: .78rem;
-    font-weight: 700;
-    letter-spacing: .05em;
-    padding: 8px 14px;
-    border-radius: 30px;
-    box-shadow: 0 10px 24px rgba(0,0,0,.4);
-    pointer-events: none;
-    white-space: nowrap;
-    text-align: center;
-  }
-
   body.locked {
     overflow: hidden;
     height: 100vh;
@@ -119,9 +99,9 @@
   .wrap {
     position: relative;
     z-index: 3;
-    max-width: 780px;
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
   }
 
   /* ---------- HERO ---------- */
@@ -200,7 +180,7 @@
 
   .hero-msg {
     min-height: 3.4em;
-    max-width: 540px;
+    max-width: 680px;
     margin: 18px auto 0;
     font-size: clamp(1rem, 3.8vw, 1.2rem);
     font-weight: 500;
@@ -803,7 +783,7 @@
   /* polaroid wall */
   .photos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     gap: 20px;
     padding: 10px 0 30px;
   }
@@ -1565,6 +1545,26 @@
 
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+  }
+
+  #previewTag {
+    position: fixed;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 130;
+    background: rgba(12, 70, 38, .92);
+    border: 1px solid rgba(76, 220, 130, .7);
+    color: #d3ffe7;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    padding: 8px 14px;
+    border-radius: 30px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.4);
+    pointer-events: none;
+    white-space: nowrap;
+    text-align: center;
   }
 </style>
 </head>
