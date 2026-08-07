@@ -471,80 +471,6 @@
     animation-play-state: paused !important;
   }
 
-  /* ---------- NAME REEL (scroll letter reveal) ---------- */
-  .name-reel {
-    height: 420vh;
-    position: relative;
-    padding: 0;
-  }
-  .reel-sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-    padding: 20px;
-  }
-  .reel-hint {
-    position: absolute;
-    top: 12%;
-    font-size: .85rem;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    opacity: .75;
-  }
-  .reel-inner {
-    display: flex;
-    gap: clamp(6px, 2vw, 22px);
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .reel-letter {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: clamp(4rem, 18vw, 10rem);
-    line-height: 1;
-    display: inline-block;
-    opacity: .07;
-    transform: scale(.5);
-    color: var(--ink);
-  }
-  .reel-letter.on {
-    opacity: 1;
-    transform: scale(1);
-    background: linear-gradient(120deg, var(--pink-deep), var(--lav), var(--gold), var(--pink-deep));
-    background-size: 250% 250%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    filter: drop-shadow(0 0 22px rgba(255, 95, 162, .5));
-    animation: letterPop .7s cubic-bezier(.34,1.56,.64,1) both;
-  }
-  @keyframes letterPop {
-    0%   { transform: scale(2.6) rotate(18deg); opacity: 0; }
-    60%  { opacity: 1; }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
-  }
-  .reel-caption {
-    margin-top: 34px;
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(1.4rem, 5vw, 2rem);
-    color: var(--pink-deep);
-    opacity: 0;
-    text-shadow: 0 0 20px rgba(255, 95, 162, .5);
-    transform: translateY(22px);
-    transition: opacity .8s ease .3s, transform .8s ease .3s;
-  }
-  .reel-caption.show { opacity: 1; transform: translateY(0); }
-
   /* ---------- BALLOONS ---------- */
   #balloonLayer {
     position: fixed;
@@ -1524,7 +1450,6 @@
     }
     .marquee-track span { -webkit-text-stroke-width: 0; }
     .name-letter { filter: drop-shadow(0 0 10px rgba(255, 95, 162, .4)); }
-    .reel-letter.on { filter: none; }
 
     section { padding: 44px 0; }
     .hero { padding: 56px 0 26px; }
@@ -1535,11 +1460,6 @@
     .section-sub { margin-bottom: 24px; }
     .letter { padding: 26px 20px; }
     .photos { padding: 2px 0 18px; gap: 14px; }
-    .reel-caption { margin-top: 22px; font-size: clamp(1.2rem, 4.5vw, 1.6rem); }
-    .reel-hint { top: 7%; }
-    .name-reel { height: 300vh; }
-    .reel-inner { flex-wrap: nowrap; gap: 3px; }
-    .reel-letter { font-size: clamp(3rem, 15vw, 8rem); }
     .cake-wrap { margin: 6px auto 22px; }
     .redeem { margin-top: 16px; }
     footer { padding: 34px 16px 80px; }
@@ -1609,21 +1529,6 @@
         <span>happy birthday <em>✦</em> best friend <em>✦</em> M A R I A <em>✦</em> you &amp; me <em>✦</em> forever <em>✦</em></span>
       </div>
     </div>
-
-    <!-- NAME REEL -->
-    <section class="name-reel" id="nameReel">
-      <div class="reel-sticky">
-        <p class="reel-hint">keep scrolling — these letters are for you</p>
-        <div class="reel-inner">
-          <span class="reel-letter">M</span>
-          <span class="reel-letter">A</span>
-          <span class="reel-letter">R</span>
-          <span class="reel-letter">I</span>
-          <span class="reel-letter">A</span>
-        </div>
-        <p class="reel-caption" id="reelCaption">five letters. one whole heart. 💖</p>
-      </div>
-    </section>
 
     <!-- LETTER -->
     <section>
@@ -2499,49 +2404,18 @@
   }, { threshold: 0.4 });
   document.querySelectorAll('.section-title').forEach(function (t) { titleIO.observe(t); });
 
-  /* ================= SCROLL: PROGRESS + NAME REEL ================= */
-  var reelSection = $('nameReel');
-  var reelLetters = document.querySelectorAll('.reel-letter');
-  var reelCaption = $('reelCaption');
+  /* ================= SCROLL PROGRESS ================= */
   var progressBar = $('progressBar');
-  var reelIdx = 0;
   var scrollTicking = false;
   function onScroll() {
     if (scrollTicking) return;
     scrollTicking = true;
     requestAnimationFrame(function () {
       scrollTicking = false;
-      var vh = window.innerHeight;
       var doc = document.documentElement;
       var scrolled = window.scrollY || doc.scrollTop;
-      var total = Math.max(1, doc.scrollHeight - vh);
+      var total = Math.max(1, doc.scrollHeight - window.innerHeight);
       if (progressBar) progressBar.style.width = Math.min(100, (scrolled / total) * 100) + '%';
-
-      if (!reelSection) return;
-      var rect = reelSection.getBoundingClientRect();
-      var total2 = reelSection.offsetHeight - vh;
-      var prog = total2 > 0 ? Math.min(1, Math.max(0, -rect.top / total2)) : 0;
-      var idx = Math.floor(prog * 5) + 1;
-      if (idx !== reelIdx) {
-        var dir = idx > reelIdx ? 1 : -1;
-        var i;
-        for (i = reelIdx; i !== idx; i += dir) {
-          var li = i - 1;
-          if (li < 0 || li > 4) continue;
-          var letter = reelLetters[li];
-          var on = dir > 0;
-          letter.classList.toggle('on', on);
-          if (on) {
-            var r = letter.getBoundingClientRect();
-            launchConfetti(24, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-          }
-        }
-        reelIdx = idx;
-      }
-      if (idx >= 5 && !reelCaption.classList.contains('show')) {
-        reelCaption.classList.add('show');
-        heartsBurst(16);
-      }
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
